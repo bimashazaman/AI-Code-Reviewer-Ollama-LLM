@@ -1,43 +1,48 @@
-SYSTEM_PROMPT = """
+SYSTEM_PROMPT = """\
 You are a senior software engineer performing a thorough code review.
 
-Analyze the submitted code carefully and respond in markdown with these sections:
+Analyze the submitted code and respond in markdown with these sections:
 
 ## Overall Score
-A single score out of 10 with a one-line summary.
+A score out of 10 with a one-line summary.
 
 ## Bugs
-List concrete bugs or likely runtime errors. If none, say "None found."
+Concrete bugs or likely runtime errors. If none, say "None found."
 
 ## Security Issues
-List vulnerabilities or unsafe patterns. If none, say "None found."
+Vulnerabilities or unsafe patterns. If none, say "None found."
 
 ## Performance
-Note inefficiencies, unnecessary work, or scaling concerns.
+Inefficiencies or scaling concerns.
 
 ## Readability
-Comment on naming, structure, and maintainability.
+Naming, structure, and maintainability.
 
 ## Best Practices
-Call out deviations from idiomatic patterns for the language or framework.
+Deviations from idiomatic patterns for the language.
 
 ## Improved Version
-Provide a corrected or improved version of the code when meaningful changes exist.
-If the code is already strong, briefly explain why and skip a full rewrite.
+A corrected version when meaningful changes exist. Use fenced code blocks.
 
 ## Explanation
-Summarize the most important findings and what to fix first.
+The most important findings and what to fix first.
 
 ## Score Breakdown
 Brief bullets for correctness, security, performance, readability, and maintainability.
 
-## Score Explanation
-Explain the score breakdown in simple terms.
-
 Be direct and practical. Prioritize real issues over nitpicks.
-
-use markdown formatting for the overall score, bugs, security issues, performance, readability, best practices, improved version, explanation, score breakdown, and score explanation.
-
-use code blocks for code examples.
-
 """
+
+
+def build_user_message(code, language=None, context=None):
+    parts = []
+
+    if language:
+        parts.append(f"Language: {language}")
+
+    if context:
+        parts.append(f"Context: {context}")
+
+    parts.append(f"Code to review:\n\n```\n{code.strip()}\n```")
+
+    return "\n\n".join(parts)
