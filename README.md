@@ -18,46 +18,59 @@ pip install -r requirements.txt
 
 ## Usage
 
-**Interactive** — paste code, then type `END`:
+You can use the AI Code Reviewer to analyze an entire codebase, a single file, or a quick snippet.
+
+### Review an Entire Codebase
+Simply provide the path to your project folder. The tool will automatically gather your code while ignoring massive folders (like `node_modules`, `.git`, `vendor`) and large data files to keep the review efficient.
 
 ```bash
-python app.py
+python3 app.py ./my-project/
 ```
 
-**Review a file:**
+### Review a Single File
+Pass the exact file you want to review.
 
 ```bash
-python app.py -f app.py
+python3 app.py src/main.py
 ```
 
-**Pipe code in:**
+### Review a Snippet (Interactive)
+Run the script without any arguments. You can paste your code directly into the terminal. Type `END` on a new line when you're finished.
 
 ```bash
-cat app.py | python app.py
+python3 app.py
 ```
 
-**Save the review:**
+### Pipe Code In
+You can also pipe the output of any command directly into the reviewer.
 
 ```bash
-python app.py -f app.py -o review.md
+cat app.py | python3 app.py
+```
+
+### Save the Review
+Save the generated review to a Markdown file using the `-o` flag.
+
+```bash
+python3 app.py ./my-project/ -o review.md
 ```
 
 ## Options
 
-| Flag | What it does |
-|------|--------------|
-| `-f` | Path to a file |
-| `-m` | Ollama model (default: `qwen2.5-coder`) |
-| `-l` | Language hint |
-| `-c` | Short context about the code |
-| `-o` | Save output to a file |
+| Flag / Arg | What it does |
+|------------|--------------|
+| `path`     | (Optional) Directory or file to review. If omitted, reads from standard input. |
+| `-m`       | Ollama model (default: `qwen2.5-coder`) |
+| `-l`       | Language hint (useful for snippets) |
+| `-c`       | Short context about what the code does |
+| `-o`       | Save output to a specific file path |
 
 ## Project files
 
 ```
-app.py        → CLI and input handling
-reviewer.py   → talks to Ollama
-prompts.py    → review instructions for the model
+app.py        → CLI, input handling, and directory traversal
+reviewer.py   → Talks to Ollama
+prompts.py    → Review instructions for the model
 ```
 
 ## Troubleshooting
@@ -65,3 +78,5 @@ prompts.py    → review instructions for the model
 **`No module named 'ollama'`** — run `pip install -r requirements.txt`
 
 **`Could not reach Ollama`** — open the Ollama app, then run `ollama pull qwen2.5-coder`
+
+**`Error: Path not found`** — Ensure the file or directory you specified actually exists.
